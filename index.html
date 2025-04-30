@@ -3,9 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
     <title>Chat Furia</title>
 </head>
 <body>
-    
+    <div class="box-question">
+        <div class="header">
+            <p>CHAT FURIA</p>
+        </div>
+        <p id="status"></p>
+        <div id="historic">
+            <!-- Aqui irá o chat -->
+        </div>
+        <div class="footer">
+            <input type="text" placeholder="Digite aqui..." id="message-input">
+            <button id="btn-submit" onclick="sendMessage()">Enviar</button>
+        </div>
+    </div>
 </body>
+<script src="main.js"></script>
 </html>
