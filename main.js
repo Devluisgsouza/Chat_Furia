@@ -1,4 +1,4 @@
-const apiKey = "sk-proj-sk-proj-YH9v0Z3zkhzHd_x69ze-8ehifE8Lvcn6wTvv9wx_ZIIlbAzTZAc-LEw_p0IXaubLDaIHOZ8kBmT3BlbkFJlOl1PKwFSUydrIDESRY8z_QnFH3SBk4j1f-w0HYehKT9e53aiSFy9hz7P4gszn6XsfvbdTVJIA-EP5Y-iCUWGHrKfUWyEUurcw4e2EnxMPUqlpBIT3BlbkFJD1WfVGeX0nWEFF6yVXQWw483Q0JVD6p_9-XZn6YL1M_FkapzXxlyMnpI0jJceoYIpdGtYHztcA"
+const apiKey = "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"
 
 function sendMessage(){
     var message = document.getElementById('message-input')
@@ -17,7 +17,7 @@ function sendMessage(){
     btnSubmit.style.cursor = 'not-allowed'
     message.disabled = true
 
-    fetch("https://api.openai.com/v1/completions"),{
+    fetch("https://api.openai.com/v1/completions",{
         method: 'POST',
         headers: {
             Accept: "application/json",
@@ -25,10 +25,54 @@ function sendMessage(){
             Authorization: `Bearer ${apiKey}`
         },
         body: JSON.stringify({
-            model: "text-davinci-003",
+            model: "gpt-4o",
             prompt: message.value,
-            max_tokens: 2048,
-            temperature: 0.5,
+            max_tokens: 200,
+            temperature: 0.5
         })
-    }
+    })
+    .then((response) => response.json())
+    .then((response) => {
+        let r = response.choices[0]['text']
+        showHitoric(message.value,r)
+    })
+    .catch((e) => {
+        console.log('Error -> ',e)
+    })
+    .finally(() => {
+        btnSubmit.disabled = false
+        btnSubmit.style.cursor = 'pointer'
+        message.disabled = false
+    })
+}
+
+
+function showHitoric(message,response){
+    var historic = document.getElementById('historic')
+
+    // My messages
+    var boxMyMessage = document.createElement('div')
+    boxMyMessage.className = 'box-my-message'
+
+    var myMessage = document.createElement('p')
+    myMessage.className = 'my-message'
+    myMessage.innerHTML = message
+
+    boxMyMessage.appendChild(myMessage)
+    historic.appendChild(boxMyMessage)
+
+
+    // Response Messages
+    var historic = document.getElementById('historic')
+
+    // My messages
+    var boxChatMessage = document.createElement('div')
+    boxChatMessage.className = 'box-chat-message'
+
+    var chatMessage = document.createElement('p')
+    boxChatMessage.className = 'my-message'
+    chatMessage.innerHTML = response
+
+    boxChatMessage.appendChild(chatMessage)
+    historic.appendChild(boxChatMessage)
 }
