@@ -1,5 +1,4 @@
 <h1 align='center'>
-    <img src='assets\FURIA-Esports-Logo-1.jpg'>
     <p>CHAT MADE BY A FAN
 </h1>
 
