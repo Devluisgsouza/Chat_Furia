@@ -8,12 +8,15 @@
 }
 
 body{
-    background-color: var(--grayblack);
+    /* background-color: var(--grayblack); */
     color: var(--white);
     font-family: Arial, Helvetica, sans-serif;
     display: flex;
     justify-content: center;
     height: 90vh;
+    background-image: url('assets/882db583081525.5ea5da24d7c69.jpg');; /* Substitua pelo caminho correto */
+    background-position: center;
+    background-size: cover;
 }
 
 .box-question{
@@ -35,6 +38,13 @@ body{
     color: var(--white);
     font-weight: bold;
     font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+}
+
+#status{
+    height: 5%;
 }
 
 .footer{
@@ -68,4 +78,51 @@ input{
     transition: .3s;
 }
 
+#historic{
+    padding: 1rem;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    height: 100%;
+}
 
+.box-my-message{
+    display: flex;
+    justify-content: flex-end;
+
+}
+
+.box-chat-message{
+    display: flex;
+    justify-content: flex-start;
+      
+}
+
+.my-message{
+    text-align: left;
+    background-color: var(--gray);
+}
+
+.chat-message{
+    background-color: var(--grayblack);
+
+}
+
+.my-message,
+.chat-message{
+    border-radius: 10px;
+    padding: 1rem;
+    color: var(--white);
+    margin: 0;
+    max-width: 80%;
+    word-wrap: break-word;
+    text-align: left;
+}
+
+.logo{
+    height: 40px;
+    margin-right: 100px;
+    vertical-align: middle;
+    margin-left: 3rem;
+}
