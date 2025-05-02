@@ -29,7 +29,7 @@ function sendMessage() {
 
     setTimeout(() => {
         var response = chatResp(message); // resposta com base na mensagem
-        showHitoric(message, response || "Poderia esplicar melhor o que você precisa? Se possível use palavras chaves, como (jogos, roupas, equipe, etc...) O CHAT FURIA agradece!");
+        showHitoric(message, response || "Poderia explicar melhor o que você precisa? Se possível use palavras chaves, como (jogos, roupas, equipe, etc...) O CHAT FURIA agradece!");
 
         
         // Limpar status e reabilitar campos
