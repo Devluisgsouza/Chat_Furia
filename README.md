@@ -13,7 +13,7 @@
 - CSS
 - HTML
 
-## 🆙 Como Utilizar ##
+## 🆙 Como Contribuir ##
 
 - Clone o projeto
 ```cmd
@@ -22,4 +22,8 @@
 
 - Abra no [VSCode](https://code.visualstudio.com)
 - Instale a extenção [Live Server](https://marketplace.visualstudio.com/items/?itemName=ritwickdey.LiveServer)
-- Clique com o botão direito do mouse no arquivo "index.html" e selecione a opção "Open with Live Server.
+- Clique com o botão direito do mouse no arquivo "index.html" e selecione a opção "Open with Live Server, para visualizar em tempo real.
+
+## 🌐 Link do site ##
+
+- [https://chat-furia.netlify.app/](https://chat-furia.netlify.app/)
