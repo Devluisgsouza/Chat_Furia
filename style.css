@@ -8,20 +8,19 @@
 }
 
 body{
-    /* background-color: var(--grayblack); */
     color: var(--white);
     font-family: Arial, Helvetica, sans-serif;
     display: flex;
     justify-content: center;
     height: 90vh;
-    background-image: url('assets/Dgdz1uAXkAEbHLh.jpg');; /* Substitua pelo caminho correto */
+    background-image: url('assets/Dgdz1uAXkAEbHLh.jpg');;
     background-position: center;
     background-size: cover;
 }
 
 .box-question{
-    background-color: rgba(0, 0, 0, 0.6); /* preto com 40% de opacidade */
-    border-radius: 10px; /* opcional: deixa visual mais suave */
+    background-color: rgba(0, 0, 0, 0.6); 
+    border-radius: 10px; 
     margin-top: 3rem;
     color: var(--dark);
     display: flex;
@@ -31,7 +30,7 @@ body{
     max-height: 800px;
     border-radius: 20px;
     text-align: center;
-    border: 1px solid white; /* borda fina branca */
+    border: 1px solid white; 
 }
 
 .header{
@@ -43,7 +42,7 @@ body{
     display: flex;
     align-items: center;
     justify-content: left;
-    border: 1px solid white; /* borda fina branca */
+    border: 1px solid white; 
 }
 
 #status{
@@ -55,7 +54,7 @@ body{
     border-radius: 0 0 20px 20px;
     padding: 1rem;
     font-size: 1.5rem;
-    border: 1px solid white; /* borda fina branca */    
+    border: 1px solid white;   
 }
 
 input{
