@@ -135,8 +135,12 @@ body {
 /* ---------- Histórico de mensagens ---------- */
 .chat__history {
     flex: 1;
+    min-height: 0;
     padding: 20px;
     overflow-y: auto;
+    /* O scroll fica preso ao histórico: não propaga para a página. */
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
     display: flex;
     flex-direction: column;
     gap: 12px;
@@ -404,10 +408,20 @@ body {
 
 /* ---------- Responsivo ---------- */
 @media (max-width: 540px) {
+    /* Trava o scroll/elástico da página: nada se move por fora do chat. */
+    html, body {
+        height: 100%;
+        overflow: hidden;
+        overscroll-behavior: none;
+    }
+
     body {
         padding: 0;
         gap: 0;
         background: var(--black);
+        /* Fixa o body para o card não "balançar" ao rolar no iOS. */
+        position: fixed;
+        inset: 0;
     }
 
     /* No mobile o chat ocupa a tela inteira, como uma conversa do WhatsApp:
@@ -422,6 +436,17 @@ body {
         backdrop-filter: none;
         -webkit-backdrop-filter: none;
         background: var(--panel-solid);
+    }
+
+    /* Respeita a área segura do topo (notch/status bar no modo app),
+       senão o header fica atrás do topo do celular. */
+    .chat__header {
+        padding-top: calc(16px + env(safe-area-inset-top));
+    }
+
+    /* Área segura na base para o input não colar na barra de gestos. */
+    .chat__footer {
+        padding-bottom: calc(14px + env(safe-area-inset-bottom));
     }
 
     .page-credit {
