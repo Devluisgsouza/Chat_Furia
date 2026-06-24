@@ -28,6 +28,9 @@
     <title>CHAT FURIA — Fan mode</title>
 </head>
 <body>
+    <!-- Fundo animado de pontos (Three.js) — puramente decorativo -->
+    <div id="dotted-surface" aria-hidden="true"></div>
+
     <main class="chat" role="main" aria-label="Chat FURIA">
         <header class="chat__header">
             <img src="assets/FURIA-Esports-Logo-1.jpg" alt="Logo da FURIA Esports" class="chat__logo">
@@ -84,5 +87,15 @@
 
     <script src="knowledge.js"></script>
     <script src="main.js"></script>
+
+    <!-- Three.js via import map + porte do componente dotted-surface -->
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.160.0/build/three.module.js"
+        }
+    }
+    </script>
+    <script type="module" src="dotted-surface.js"></script>
 </body>
 </html>

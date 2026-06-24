@@ -27,6 +27,20 @@
     box-sizing: border-box;
 }
 
+/* ---------- Fundo animado de pontos (dotted-surface) ----------
+   Equivale ao `pointer-events-none fixed inset-0 -z-1` do componente
+   original em Tailwind: ocupa a tela toda atrás de todo o conteúdo. */
+#dotted-surface {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+}
+
+#dotted-surface canvas {
+    display: block;
+}
+
 html, body {
     height: 100%;
 }
@@ -42,9 +56,7 @@ body {
     gap: 14px;
     padding: 24px 16px;
     min-height: 100dvh;
-    background:
-        linear-gradient(180deg, rgba(0, 0, 0, 0.78), rgba(0, 0, 0, 0.92)),
-        url("assets/Dgdz1uAXkAEbHLh.jpg") center / cover no-repeat fixed;
+    background: linear-gradient(180deg, #0a0a0a, #000000);
 }
 
 /* ---------- Container principal ---------- */
@@ -393,18 +405,23 @@ body {
 /* ---------- Responsivo ---------- */
 @media (max-width: 540px) {
     body {
-        padding: 12px;
+        padding: 0;
         gap: 0;
-        /* background-attachment: fixed é ignorado em vários navegadores
-           móveis, deixando o fundo branco — forçamos o preto aqui. */
         background: var(--black);
     }
 
+    /* No mobile o chat ocupa a tela inteira, como uma conversa do WhatsApp:
+       sem bordas, sem cantos arredondados, de ponta a ponta. */
     .chat {
         max-width: 100%;
-        height: calc(100dvh - 24px);
-        border: 1px solid var(--line);
-        border-radius: var(--radius);
+        width: 100%;
+        height: 100dvh;
+        border: none;
+        border-radius: 0;
+        box-shadow: none;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        background: var(--panel-solid);
     }
 
     .page-credit {
