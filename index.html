@@ -1,27 +1,81 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#000000">
+    <meta name="description" content="CHAT FURIA — assistente não-oficial feito por um fã com as principais informações sobre o time de CS da FURIA: partidas, line-up, loja e mais.">
+    <meta name="author" content="Luis Guilherme de Souza">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="CHAT FURIA — Fan mode">
+    <meta property="og:description" content="Tudo sobre o time de CS da FURIA em um chat: partidas, line-up, loja, redes e mais.">
+    <meta property="og:image" content="assets/FURIA-Esports-Logo-1.jpg">
+
+    <link rel="icon" href="assets/FURIA-Esports-Logo-1.jpg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <title>Chat Furia</title>
+    <title>CHAT FURIA — Fan mode</title>
 </head>
 <body>
-    <div class="box-question">
-        <div class="header">
-            <img src="assets/FURIA-Esports-Logo-1.jpg" alt="Logo Furia" class="logo">
-            <p>CHAT FURIA</p>
+    <main class="chat" role="main" aria-label="Chat FURIA">
+        <header class="chat__header">
+            <img src="assets/FURIA-Esports-Logo-1.jpg" alt="Logo da FURIA Esports" class="chat__logo">
+            <div class="chat__brand">
+                <h1 class="chat__title">CHAT FURIA</h1>
+                <span class="chat__status">
+                    <span class="chat__status-dot" aria-hidden="true"></span>
+                    Online · assistente de um fã
+                </span>
+            </div>
+        </header>
+
+        <section id="historic" class="chat__history" aria-live="polite" aria-label="Histórico de mensagens">
+            <!-- As mensagens são injetadas via JavaScript -->
+        </section>
+
+        <div class="chat__suggestions">
+            <button type="button" id="suggestions-toggle" class="chat__suggestions-toggle"
+                    aria-expanded="false" aria-controls="quick-replies">
+                <span class="chat__suggestions-icon" aria-hidden="true">💡</span>
+                <span id="suggestions-toggle-label">Abrir sugestões</span>
+                <svg class="chat__suggestions-chevron" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+                    <path fill="currentColor" d="M7 10l5 5 5-5z"/>
+                </svg>
+            </button>
+            <div id="quick-replies" class="chat__quick-replies" aria-label="Sugestões de perguntas" hidden></div>
         </div>
-        
-        <div id="historic">
-            <!-- Aqui irá o chat -->
-        </div>
-        <p id="status"></p>
-        <div class="footer">
-            <input type="text" placeholder="Digite aqui..." id="message-input">
-            <button id="btn-submit" onclick="sendMessage()">Enviar</button>
-        </div>
-    </div>
+
+        <p id="typing" class="chat__typing" hidden aria-hidden="true">
+            CHAT FURIA está digitando
+            <span class="chat__dots"><span></span><span></span><span></span></span>
+        </p>
+
+        <form id="chat-form" class="chat__footer" autocomplete="off">
+            <input
+                type="text"
+                id="message-input"
+                class="chat__input"
+                placeholder="Digite sua mensagem..."
+                aria-label="Digite sua mensagem"
+                maxlength="500"
+                required>
+            <button type="submit" id="btn-submit" class="chat__send" aria-label="Enviar mensagem">
+                <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+                    <path fill="currentColor" d="M3.4 20.4 21 12 3.4 3.6 3.39 10.2 15 12l-11.61 1.8z"/>
+                </svg>
+            </button>
+        </form>
+    </main>
+
+    <footer class="page-credit">
+        Feito por um fã · <a href="https://github.com/Devluisgsouza/Chat_Furia" target="_blank" rel="noopener">Código no GitHub</a>
+    </footer>
+
+    <script src="knowledge.js"></script>
+    <script src="main.js"></script>
 </body>
-<script src="main.js"></script>
 </html>

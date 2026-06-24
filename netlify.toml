@@ -1,0 +1,20 @@
+# Configuração do deploy no Netlify
+
+[build]
+  publish = "."
+  functions = "netlify/functions"
+
+# Garante Node 18+ nas funções (necessário para o fetch global usado em liveData.js).
+[build.environment]
+  NODE_VERSION = "20"
+
+# Encaminha as chamadas /api/* para as funções serverless.
+[[redirects]]
+  from = "/api/chat"
+  to = "/.netlify/functions/chat"
+  status = 200
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200

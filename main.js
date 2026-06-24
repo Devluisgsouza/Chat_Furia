@@ -1,118 +1,202 @@
-const furia = 'Para isso voce pode acessar o site oficial da Furia! Lá voce encontra os melhores produtos do melhor time do Mundo! Segue o Link do site -> https://www.furia.gg'
-const whats = 'Para tirar dúvidas, conversar conosco, ou até fornecer sugestões, nos chame no Whats! -> https://wa.me/5511993404466'
-const proxPartidas = 'Para saber sobre as próximas partidas da FURIA, sobre o time, a equipe, entre outras informações, entre no link a seguir -> https://draft5.gg/equipe/330-FURIA/proximas-partidas'
-const ola = 'Olá! Sou o CHAT FURIA, em que posso te ajudar?'
+/* ============================================================
+   CHAT FURIA — lógica do front-end
+   - Tenta responder via API serverless (/api/chat)
+   - Faz fallback para a base de conhecimento local (knowledge.js)
+   ============================================================ */
+(function () {
+  "use strict";
 
+  var API_ENDPOINT = "/api/chat";
+  var THINK_DELAY = 700; // ms — tempo do "digitando..."
 
-function sendMessage() {
-    var messageInput = document.getElementById('message-input'); 
-    var message = messageInput.value; // armazena o que foi digitado pelo usuário
+  var els = {
+    history: document.getElementById("historic"),
+    form: document.getElementById("chat-form"),
+    input: document.getElementById("message-input"),
+    sendBtn: document.getElementById("btn-submit"),
+    typing: document.getElementById("typing"),
+    quickReplies: document.getElementById("quick-replies"),
+    suggestionsToggle: document.getElementById("suggestions-toggle"),
+    suggestionsLabel: document.getElementById("suggestions-toggle-label")
+  };
+
+  var apiAvailable = true; // vira false após a primeira falha de fetch
+
+  /* ---------- Utilidades ---------- */
+
+  function escapeHtml(text) {
+    var div = document.createElement("div");
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
+  function timeNow() {
+    return new Date().toLocaleTimeString("pt-BR", {
+      hour: "2-digit",
+      minute: "2-digit"
+    });
+  }
+
+  function scrollToBottom() {
+    els.history.scrollTop = els.history.scrollHeight;
+  }
+
+  /* ---------- Renderização de mensagens ---------- */
+
+  /**
+   * @param {string} content - texto (usuário) ou HTML confiável (bot)
+   * @param {"user"|"bot"} sender
+   * @param {boolean} isHtml - true quando o conteúdo é HTML do próprio bot
+   */
+  function addMessage(content, sender, isHtml) {
+    var wrapper = document.createElement("div");
+    wrapper.className = "message message--" + sender;
+
+    var bubble = document.createElement("div");
+    bubble.className = "message__bubble";
+    if (isHtml) {
+      bubble.innerHTML = content; // conteúdo do bot é confiável
+    } else {
+      bubble.textContent = content; // mensagem do usuário: sempre escapada
+    }
+
+    var time = document.createElement("span");
+    time.className = "message__time";
+    time.textContent = timeNow();
+
+    wrapper.appendChild(bubble);
+    wrapper.appendChild(time);
+    els.history.appendChild(wrapper);
+    scrollToBottom();
+  }
+
+  function showTyping(show) {
+    els.typing.hidden = !show;
+    if (show) scrollToBottom();
+  }
+
+  function setBusy(busy) {
+    els.sendBtn.disabled = busy;
+    els.input.disabled = busy;
+    if (!busy) els.input.focus();
+  }
+
+  /* ---------- Obtenção da resposta ---------- */
+
+  /** Resolve a resposta usando a API; cai para a base local em caso de erro. */
+  function resolveResponse(message) {
+    if (!apiAvailable) {
+      return Promise.resolve(localResponse(message));
+    }
+
+    return fetch(API_ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: message })
+    })
+      .then(function (res) {
+        if (!res.ok) throw new Error("API status " + res.status);
+        return res.json();
+      })
+      .then(function (data) {
+        return data && data.response ? data.response : localResponse(message);
+      })
+      .catch(function () {
+        // Sem backend (ex.: aberto via Live Server) — usa o motor local.
+        apiAvailable = false;
+        return localResponse(message);
+      });
+  }
+
+  function localResponse(message) {
+    if (window.FuriaKnowledge) {
+      return window.FuriaKnowledge.getResponse(message).response;
+    }
+    return "Ops! Não consegui carregar minhas respostas. Tente recarregar a página. 🐾";
+  }
+
+  /* ---------- Fluxo de envio ---------- */
+
+  function handleSend(rawMessage) {
+    var message = (rawMessage || "").trim();
 
     if (!message) {
-        messageInput.style.border = '1px solid red'; // Apresenta borda vermelha na caixa de texto se enviar sem valor
-        return;
+      els.input.classList.add("is-invalid");
+      setTimeout(function () {
+        els.input.classList.remove("is-invalid");
+      }, 400);
+      return;
     }
 
-    messageInput.style.border = 'none';
+    addMessage(message, "user", false);
+    els.input.value = "";
+    setBusy(true);
+    showTyping(true);
 
-    var status = document.getElementById('status');
-    var btnSubmit = document.getElementById('btn-submit');
-    
+    var started = Date.now();
+    resolveResponse(message).then(function (response) {
+      // Garante um tempo mínimo de "digitando" para parecer natural.
+      var wait = Math.max(0, THINK_DELAY - (Date.now() - started));
+      setTimeout(function () {
+        showTyping(false);
+        addMessage(response, "bot", true);
+        setBusy(false);
+      }, wait);
+    });
+  }
 
-    // Apresenta o status quando a mensagem é enviada e desabilita os campos de interação
+  /* ---------- Respostas rápidas ---------- */
 
-    status.style.display = 'block'  
-    status.innerHTML = 'Loading...';
-    btnSubmit.disabled = true;
-    btnSubmit.style.cursor = 'not-allowed';
-    messageInput.disabled = true;  
+  function renderQuickReplies() {
+    if (!window.FuriaKnowledge || !els.quickReplies) return;
+    var replies = window.FuriaKnowledge.quickReplies || [];
 
-    setTimeout(() => {
-        var response = chatResp(message); // resposta com base na mensagem
-        showHitoric(message, response || "Poderia explicar melhor o que você precisa? Se possível use palavras chaves, como (jogos, roupas, equipe, etc...) O CHAT FURIA agradece!");
+    replies.forEach(function (item) {
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "quick-reply";
+      btn.textContent = item.label;
+      btn.addEventListener("click", function () {
+        handleSend(item.text);
+      });
+      els.quickReplies.appendChild(btn);
+    });
+  }
 
-        
-        // Limpar status e reabilitar campos
+  function setSuggestionsOpen(open) {
+    els.quickReplies.hidden = !open;
+    els.suggestionsToggle.setAttribute("aria-expanded", String(open));
+    els.suggestionsLabel.textContent = open ? "Fechar sugestões" : "Abrir sugestões";
+  }
 
-        status.style.display = 'none'
-        btnSubmit.disabled = false;
-        btnSubmit.style.cursor = 'pointer';
-        messageInput.disabled = false;
-        messageInput.value = '';
-    }, 1000); // espera 1 segundo
-}
+  function setupSuggestionsToggle() {
+    if (!els.suggestionsToggle) return;
+    els.suggestionsToggle.addEventListener("click", function () {
+      var isOpen = els.suggestionsToggle.getAttribute("aria-expanded") === "true";
+      setSuggestionsOpen(!isOpen);
+    });
+  }
 
-// Envia a mensagem com a tecla "Enter"
+  /* ---------- Inicialização ---------- */
 
-document.getElementById("message-input").addEventListener("keydown", function(event) {
-    if (event.key === "Enter") {
-        event.preventDefault();
-        sendMessage();
-    }
-});
+  function init() {
+    renderQuickReplies();
+    setupSuggestionsToggle();
 
+    // Mensagem de boas-vindas.
+    showTyping(true);
+    setTimeout(function () {
+      showTyping(false);
+      addMessage(localResponse("ola"), "bot", true);
+    }, 500);
 
-// Retorna a resposta com base em palavras chaves digitadas pelo usuário
+    els.form.addEventListener("submit", function (event) {
+      event.preventDefault();
+      handleSend(els.input.value);
+    });
 
-function chatResp(message) {
-    const olawords = ['ola', 'oi', 'hi', 'bom dia', 'boa tarde', 'boa noite', 'hello', 'eai']
-    const lojaKeywords = ['loja', 'comprar', 'roupas', 'camisa', 'camiseta', 'calça', 'blusa', 'roupa', 'cammiseta'];
-    const whatsKeywords = ['whatsapp', 'contato', 'falar', 'mensagem', 'conversar','atendimento'];
-    const partidasKeywords = ['partida','partidas', 'jogo', 'jogos', 'horário', 'campeonato', 'jogador', 'equipe', 'time', 'camp'];
+    els.input.focus();
+  }
 
-    message = message.toLowerCase();
-
-    for (let word of lojaKeywords) {
-        if (message.includes(word)) return furia;
-    }
-
-    for (let word of whatsKeywords) {
-        if (message.includes(word)) return whats;
-    }
-
-    for (let word of partidasKeywords) {
-        if (message.includes(word)) return proxPartidas;
-    }
-
-    for (let word of olawords) {
-        if (message.includes(word)) return ola;
-    }
-
-    return null;
-}
-
-
-// Mostra as mensagens enviadas pelo usuário e as respostas do chat
-
-function showHitoric(message, response) {
-    var historic = document.getElementById('historic');
-
-    // Minha mensagem
-    var boxMyMessage = document.createElement('div');
-    boxMyMessage.className = 'box-my-message';
-
-    var myMessage = document.createElement('p');
-    myMessage.className = 'my-message';
-    myMessage.innerHTML = message;
-
-    boxMyMessage.appendChild(myMessage);
-    historic.appendChild(boxMyMessage);
-
-    // Resposta do chat
-    var boxChatMessage = document.createElement('div');
-    boxChatMessage.className = 'box-chat-message';
-
-    var chatMessage = document.createElement('p');
-    chatMessage.className = 'chat-message';
-    chatMessage.innerHTML = response;
-
-    boxChatMessage.appendChild(chatMessage);
-    historic.appendChild(boxChatMessage);
-
-    historic.scrollTop = historic.scrollHeight
-}
-
-
-
-
-
+  document.addEventListener("DOMContentLoaded", init);
+})();
