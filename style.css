@@ -423,6 +423,12 @@ body {
     .message {
         max-width: 88%;
     }
+
+    /* iOS Safari dá zoom automático ao focar inputs com fonte < 16px.
+       Manter 16px evita o zoom e o consequente desalinhamento do layout. */
+    .chat__input {
+        font-size: 16px;
+    }
 }
 
 @media (prefers-reduced-motion: reduce) {
