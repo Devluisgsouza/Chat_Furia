@@ -393,15 +393,18 @@ body {
 /* ---------- Responsivo ---------- */
 @media (max-width: 540px) {
     body {
-        padding: 0;
+        padding: 12px;
         gap: 0;
+        /* background-attachment: fixed é ignorado em vários navegadores
+           móveis, deixando o fundo branco — forçamos o preto aqui. */
+        background: var(--black);
     }
 
     .chat {
         max-width: 100%;
-        height: 100dvh;
-        border: none;
-        border-radius: 0;
+        height: calc(100dvh - 24px);
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
     }
 
     .page-credit {
