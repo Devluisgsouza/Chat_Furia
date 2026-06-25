@@ -442,13 +442,14 @@ body {
 
     /* No mobile o chat ocupa a tela inteira, como uma conversa do WhatsApp:
        sem bordas, sem cantos arredondados, de ponta a ponta.
-       Herda 100% da altura do body (que é fixed, height: 100dvh): assim o
-       card cobre a tela física inteira e o footer encosta na borda inferior
-       real, sem buraco vazio nem vazamento do input no modo app. */
+       Usa 100dvh (e NÃO height: 100% do body): no modo app do iOS o % sobre
+       um body fixed não resolve igual ao dvh e o card fica mais curto que a
+       tela, sobrando uma faixa do body abaixo do footer. Com 100dvh o card
+       cobre a tela física inteira e o footer encosta na borda real. */
     .chat {
         max-width: 100%;
         width: 100%;
-        height: 100%;
+        height: 100dvh;
         border: none;
         border-radius: 0;
         box-shadow: none;
@@ -463,11 +464,11 @@ body {
         padding-top: calc(16px + env(safe-area-inset-top));
     }
 
-    /* Área segura na base para o input não colar na barra de gestos.
-       max() (e não soma) evita empilhar os 14px em cima do inset: no modo
-       app o home indicator (~34px) já basta, então o footer fica mais
-       proporcional ao topo e encosta no fim da tela sem folga extra. */
+    /* Padding vertical simétrico, com a área segura aplicada igualmente em
+       cima e embaixo: assim o input fica centralizado verticalmente no bar
+       e, no modo app, a base ainda fica acima do home indicator. */
     .chat__footer {
+        padding-top: max(14px, env(safe-area-inset-bottom));
         padding-bottom: max(14px, env(safe-area-inset-bottom));
     }
 
@@ -493,20 +494,6 @@ body {
     .chat__input {
         font-size: 16px;
     }
-
-    /* ===== DEBUG TEMPORÁRIO — REMOVER DEPOIS =====
-       Pinta cada camada de uma cor forte para localizar o espaço vazio.
-       Olhe a faixa vazia abaixo do input e veja a cor:
-         VERMELHO  -> é o html (raiz / fundo da página sob o body)
-         AZUL      -> é o body, mas o .chat não chega lá (chat curto)
-         VERDE     -> é o footer (padding-bottom da safe-area)
-         AMARELO   -> é o .chat preenchendo, mas o footer não encosta
-       Se a faixa não tiver NENHUMA dessas cores (transparente/preta),
-       então nenhum elemento cobre ali — é a tela do iOS aparecendo. */
-    html { background: red !important; }
-    body { background: blue !important; }
-    .chat { background: yellow !important; }
-    .chat__footer { background: green !important; }
 }
 
 @media (prefers-reduced-motion: reduce) {
