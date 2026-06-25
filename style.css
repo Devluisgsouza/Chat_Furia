@@ -342,7 +342,7 @@ body {
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 14px 16px;
+    padding: 20px 16px 14px;
     background: var(--header);
     border-top: 1px solid var(--line);
 }
@@ -463,10 +463,9 @@ body {
         padding-top: calc(16px + env(safe-area-inset-top));
     }
 
-    /* Padding pequeno e simétrico: input centralizado e rente ao fim da
-       tela, sem a folga grande da safe-area que parecia "espaço vazio". */
+    /* Um pouco mais de respiro acima do input; base rente ao fim da tela. */
     .chat__footer {
-        padding-top: 14px;
+        padding-top: 20px;
         padding-bottom: 14px;
     }
 
