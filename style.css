@@ -493,6 +493,20 @@ body {
     .chat__input {
         font-size: 16px;
     }
+
+    /* ===== DEBUG TEMPORÁRIO — REMOVER DEPOIS =====
+       Pinta cada camada de uma cor forte para localizar o espaço vazio.
+       Olhe a faixa vazia abaixo do input e veja a cor:
+         VERMELHO  -> é o html (raiz / fundo da página sob o body)
+         AZUL      -> é o body, mas o .chat não chega lá (chat curto)
+         VERDE     -> é o footer (padding-bottom da safe-area)
+         AMARELO   -> é o .chat preenchendo, mas o footer não encosta
+       Se a faixa não tiver NENHUMA dessas cores (transparente/preta),
+       então nenhum elemento cobre ali — é a tela do iOS aparecendo. */
+    html { background: red !important; }
+    body { background: blue !important; }
+    .chat { background: yellow !important; }
+    .chat__footer { background: green !important; }
 }
 
 @media (prefers-reduced-motion: reduce) {
