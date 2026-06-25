@@ -429,12 +429,14 @@ body {
 
     /* No mobile o chat ocupa a tela inteira, como uma conversa do WhatsApp:
        sem bordas, sem cantos arredondados, de ponta a ponta.
-       A altura em dvh acompanha a barra inferior do navegador: se ela
-       existir, o card para nela; se sumir (modo app), o card vai até o fim. */
+       Herda a altura do body (que é fixed inset:0), e não 100dvh: no modo
+       app (standalone) do iOS o dvh pode não bater exato com o viewport e o
+       card "vaza" alguns px, jogando o input para fora da tela. Usando 100%
+       do body fixo, o footer encosta sempre na borda inferior real. */
     .chat {
         max-width: 100%;
         width: 100%;
-        height: 100dvh;
+        height: 100%;
         border: none;
         border-radius: 0;
         box-shadow: none;
