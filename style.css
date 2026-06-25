@@ -41,6 +41,14 @@
     display: block;
 }
 
+/* Fundo escuro na raiz: no modo app (standalone) do iOS, a faixa do home
+   indicator pode não ser coberta pelo body (que é fixed), expondo o fundo
+   branco padrão da página atrás do <html>. Pintar a raiz de preto faz essa
+   faixa virar escura e some o "espaço em branco" abaixo do rodapé. */
+html {
+    background: var(--black);
+}
+
 html, body {
     height: 100%;
 }
@@ -419,20 +427,24 @@ body {
         padding: 0;
         gap: 0;
         background: var(--black);
-        /* Fixa o body para o card não "balançar" ao rolar no iOS. */
+        /* Fixa o body para o card não "balançar" ao rolar no iOS.
+           Ancora no topo e usa height: 100dvh (e NÃO inset: 0): no modo app
+           o inset: 0 para no topo do home indicator, deixando uma faixa vazia
+           abaixo do footer. O 100dvh cobre a tela física inteira, incluindo a
+           área segura inferior, então o card encosta no fim de verdade. */
         position: fixed;
-        inset: 0;
-        /* Ancora o card no topo (sem centralizar), para que a altura em
-           dvh encoste exatamente onde a barra inferior começa. */
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 100dvh;
         display: block;
     }
 
     /* No mobile o chat ocupa a tela inteira, como uma conversa do WhatsApp:
        sem bordas, sem cantos arredondados, de ponta a ponta.
-       Herda a altura do body (que é fixed inset:0), e não 100dvh: no modo
-       app (standalone) do iOS o dvh pode não bater exato com o viewport e o
-       card "vaza" alguns px, jogando o input para fora da tela. Usando 100%
-       do body fixo, o footer encosta sempre na borda inferior real. */
+       Herda 100% da altura do body (que é fixed, height: 100dvh): assim o
+       card cobre a tela física inteira e o footer encosta na borda inferior
+       real, sem buraco vazio nem vazamento do input no modo app. */
     .chat {
         max-width: 100%;
         width: 100%;
