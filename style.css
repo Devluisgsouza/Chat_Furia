@@ -64,7 +64,11 @@ body {
     gap: 14px;
     padding: 24px 16px;
     min-height: 100dvh;
-    background: black;
+    /* Transparente de propósito: o fundo preto vem do <html> (atrás de tudo)
+       e o body precisa ser transparente para o canvas dos pontos (z-index:-1,
+       pintado atrás do body) aparecer. Com fundo opaco aqui, o body tapa a
+       animação. Visualmente continua tudo preto. */
+    background: transparent;
 }
 
 /* ---------- Container principal ---------- */
