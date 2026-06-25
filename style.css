@@ -427,29 +427,26 @@ body {
         padding: 0;
         gap: 0;
         background: var(--black);
-        /* Fixa o body para o card não "balançar" ao rolar no iOS.
-           Ancora no topo e usa height: 100dvh (e NÃO inset: 0): no modo app
-           o inset: 0 para no topo do home indicator, deixando uma faixa vazia
-           abaixo do footer. O 100dvh cobre a tela física inteira, incluindo a
-           área segura inferior, então o card encosta no fim de verdade. */
+        /* Fixa o body como backdrop escuro de tela cheia (cobre tudo atrás
+           do card, incluindo as áreas seguras). */
         position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 100dvh;
+        inset: 0;
         display: block;
     }
 
     /* No mobile o chat ocupa a tela inteira, como uma conversa do WhatsApp:
        sem bordas, sem cantos arredondados, de ponta a ponta.
-       Usa 100dvh (e NÃO height: 100% do body): no modo app do iOS o % sobre
-       um body fixed não resolve igual ao dvh e o card fica mais curto que a
-       tela, sobrando uma faixa do body abaixo do footer. Com 100dvh o card
-       cobre a tela física inteira e o footer encosta na borda real. */
+       Usa position: fixed + inset: 0 (e NÃO height: 100dvh): no modo app do
+       iOS o dvh NÃO inclui a faixa da área segura inferior (home indicator),
+       então o card parava antes do fim físico. Com viewport-fit=cover, o
+       inset: 0 cobre o viewport inteiro, áreas seguras incluídas, e o footer
+       encosta no fim real. height: auto para o inset definir a altura. */
     .chat {
+        position: fixed;
+        inset: 0;
         max-width: 100%;
-        width: 100%;
-        height: 100dvh;
+        width: auto;
+        height: auto;
         border: none;
         border-radius: 0;
         box-shadow: none;
