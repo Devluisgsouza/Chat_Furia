@@ -437,17 +437,11 @@ body {
 
     /* No mobile o chat ocupa a tela inteira, como uma conversa do WhatsApp:
        sem bordas, sem cantos arredondados, de ponta a ponta.
-       No modo app do iOS o inset: 0 (e o 100dvh) param no limite da área
-       segura, deixando a faixa do home indicator descoberta abaixo do footer.
-       Por isso a borda inferior é puxada PARA BAIXO pela altura da área segura
-       (bottom negativo), cobrindo essa faixa e encostando no fim físico real.
-       Onde não há área segura, env() = 0, então bottom = 0 (sem efeito). */
+       inset: 0 (com viewport-fit=cover) já encosta no fim físico da tela,
+       então o card cobre tudo de ponta a ponta. */
     .chat {
         position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: calc(-1 * env(safe-area-inset-bottom));
+        inset: 0;
         max-width: 100%;
         width: auto;
         height: auto;
@@ -465,12 +459,11 @@ body {
         padding-top: calc(16px + env(safe-area-inset-top));
     }
 
-    /* Padding vertical simétrico, com a área segura aplicada igualmente em
-       cima e embaixo: assim o input fica centralizado verticalmente no bar
-       e, no modo app, a base ainda fica acima do home indicator. */
+    /* Padding pequeno e simétrico: input centralizado e rente ao fim da
+       tela, sem a folga grande da safe-area que parecia "espaço vazio". */
     .chat__footer {
-        padding-top: max(14px, env(safe-area-inset-bottom));
-        padding-bottom: max(14px, env(safe-area-inset-bottom));
+        padding-top: 14px;
+        padding-bottom: 14px;
     }
 
     .page-credit {
