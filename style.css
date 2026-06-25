@@ -4,7 +4,7 @@
    ============================================================ */
 
 :root {
-    --black: #0000;
+    --black: black;
     --panel: rgba(15, 15, 15, 0.82);
     --panel-solid: #111111;
     --header: #000000;
@@ -46,7 +46,7 @@
    branco padrão da página atrás do <html>. Pintar a raiz de preto faz essa
    faixa virar escura e some o "espaço em branco" abaixo do rodapé. */
 html {
-    background: var(--black);
+    background: black;
 }
 
 html, body {
@@ -64,7 +64,7 @@ body {
     gap: 14px;
     padding: 24px 16px;
     min-height: 100dvh;
-    background: #0000;
+    background: black;
 }
 
 /* ---------- Container principal ---------- */
