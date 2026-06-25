@@ -451,9 +451,12 @@ body {
         padding-top: calc(16px + env(safe-area-inset-top));
     }
 
-    /* Área segura na base para o input não colar na barra de gestos. */
+    /* Área segura na base para o input não colar na barra de gestos.
+       max() (e não soma) evita empilhar os 14px em cima do inset: no modo
+       app o home indicator (~34px) já basta, então o footer fica mais
+       proporcional ao topo e encosta no fim da tela sem folga extra. */
     .chat__footer {
-        padding-bottom: calc(14px + env(safe-area-inset-bottom));
+        padding-bottom: max(14px, env(safe-area-inset-bottom));
     }
 
     .page-credit {
